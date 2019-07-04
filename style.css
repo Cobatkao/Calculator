@@ -1,0 +1,53 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.calculator {
+  display: inline-block;
+  font-size: 2em;
+  margin-top: 7em;
+}
+
+.calculator .output {
+  height: 4em;
+  border: 1px solid red;
+}
+
+.calculator .row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.calculator .button.btn_clear {
+  flex: 3
+}
+
+.calculator .button.btn_0 {
+  flex: 2
+}
+
+.calculator .button {
+  width: 6em;
+  height: 6em;
+  font-size: 16px;
+  outline: none;
+}
+
+.output {
+  position: relative;
+}
+
+.output span {
+  position: absolute;
+  right: .5em;
+  top: 2em;
+  font-size: 1.2em;
+}
