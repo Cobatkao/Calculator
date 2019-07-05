@@ -100,8 +100,8 @@
       }
       result = result
         .toPrecision(12)
-        .replace(/0+$/g, '')
-        .replace(/0+e/g, '')
+        .replace(/.0+$/g, '')
+        .replace(/.0+e/g, '')
       if (n2 === 0) {
         result = '不是数字'
       }
