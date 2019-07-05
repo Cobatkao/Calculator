@@ -58,48 +58,59 @@
       })
     }
 
-    bindEvent () {
+    updateNum (n: number, text: string): void {
+      if (n) {
+        n = parseInt(n.toString() + text)
+      } else {
+        n = parseInt(text)
+      }
+      this.span.textContent = n.toString()
+    }
+
+    updateNumber (text: string): void {
+      if (this.operator) {
+        this.updateNum(this.n2, text)
+      } else {
+        this.updateNum(this.n1, text)
+      }
+    }
+
+    updateOperator (text: string): void {
+      this.operator = text
+    }
+
+    updateResult (): void {
+      let result
+      if (this.operator === '+') {
+        result = this.n1 + this.n2
+      } else if (this.operator === '-') {
+        result = this.n1 - this.n2
+      } else if (this.operator === '*') {
+        result = this.n1 * this.n2
+      } else if (this.operator === '÷') {
+        result = this.n1 / this.n2
+      }
+      this.span.textContent = result.toString()
+    }
+
+    updateNumberAndOperator (text: string): void {
+      if ('0123456789'.indexOf(text) >= 0) {
+        this.updateNumber(text)
+      } else if ('+-*÷'.indexOf(text) >= 0) {
+        this.updateOperator(text)
+      } else if ('='.indexOf(text) >= 0) {
+        this.updateResult()
+      }
+    }
+
+    bindEvent (): void {
       this.container.addEventListener('click', (e) => {
         if (e.target instanceof HTMLButtonElement) {
           let button: HTMLButtonElement = e.target
-          let text: string = button.textContent
-          if ('0123456789'.indexOf(text) >= 0) {
-            console.log('数字类型');
-            // 如果有操作符
-            if (this.operator) {
-              if (this.n2) {
-                this.n2 = parseInt(this.n2.toString() + text)
-              } else {
-                this.n2 = parseInt(text)
-              }
-              this.span.textContent = this.n2.toString()
-            } else {
-              // 没有操作符
-              if (this.n1) {
-                this.n1 = parseInt(this.n1.toString() + text)
-              } else {
-                this.n1 = parseInt(text)
-              }
-              this.span.textContent = this.n1.toString()
-            }
-          } else if ('+-*÷'.indexOf(text) >= 0) {
-            this.operator = text
-          } else if ('='.indexOf(text) >= 0) {
-            let result
-            if (this.operator === '+') {
-              result = this.n1 + this.n2
-            } else if (this.operator === '-') {
-              result = this.n1 - this.n2
-            } else if (this.operator === '*') {
-              result = this.n1 * this.n2
-            } else if (this.operator === '÷') {
-              result = this.n1 / this.n2
-            }
-            this.span.textContent = result.toString()
-          } else {
-            console.log('不知道类型');
-          }
+          let text = button.textContent
+          this.updateNumberAndOperator(text)
         } else {
+          return
         }
       })
     }
