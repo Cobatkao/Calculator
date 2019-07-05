@@ -1,42 +1,44 @@
 {
   class Calculator {
-    public container: HTMLDivElement;
-    private output: HTMLDivElement;
-    private span: HTMLSpanElement;
-    public operator: string;
-    public n1: number;
-    public n2: number;
+    public container: HTMLDivElement
+    private output: HTMLDivElement
+    private span: HTMLSpanElement
+    public operator: string
+    public n1: number
+    public n2: number
     private keys: Array<Array<string>> = [
       ['clear', '÷'],
       ['7', '8', '9', '+'],
       ['4', '5', '6', '-'],
       ['1', '2', '3', '*'],
       ['0', '.', '=']
-    ];
-    
+    ]
+
     constructor() {
       this.createContainer()
       this.createOutput()
-      this.createButtons()      
+      this.createButtons()
       this.bindEvent()
     }
 
-    createButton (text: string, container: HTMLElement, className: string) {
+    createButton(text: string, container: HTMLElement, className: string) {
       let button: HTMLButtonElement = document.createElement('button')
       button.textContent = text
-      if (className) { button.className = className }
+      if (className) {
+        button.className = className
+      }
       container.appendChild(button)
       return button
     }
 
-    createContainer () {
+    createContainer() {
       const container: HTMLDivElement = document.createElement('div')
       container.classList.add('calculator')
       document.body.appendChild(container)
       this.container = container
     }
 
-    createOutput () {
+    createOutput() {
       const output: HTMLDivElement = document.createElement('div')
       output.classList.add('output')
       const span: HTMLSpanElement = document.createElement('span')
@@ -44,10 +46,10 @@
       output.appendChild(span)
       this.container.appendChild(output)
       this.span = span
-      this.output = output 
+      this.output = output
     }
 
-    createButtons () {
+    createButtons() {
       this.keys.forEach((keyRow: Array<string>) => {
         let oDiv: HTMLDivElement = document.createElement('div')
         oDiv.classList.add('row')
@@ -58,7 +60,7 @@
       })
     }
 
-    updateNum (n: number, text: string): void {
+    updateNum(n: number, text: string): void {
       if (n) {
         n = parseInt(n.toString() + text)
       } else {
@@ -67,7 +69,7 @@
       this.span.textContent = n.toString()
     }
 
-    updateNumber (text: string): void {
+    updateNumber(text: string): void {
       if (this.operator) {
         this.updateNum(this.n2, text)
       } else {
@@ -75,11 +77,11 @@
       }
     }
 
-    updateOperator (text: string): void {
+    updateOperator(text: string): void {
       this.operator = text
     }
 
-    updateResult (): void {
+    updateResult(): void {
       let result
       if (this.operator === '+') {
         result = this.n1 + this.n2
@@ -93,7 +95,7 @@
       this.span.textContent = result.toString()
     }
 
-    updateNumberAndOperator (text: string): void {
+    updateNumberAndOperator(text: string): void {
       if ('0123456789'.indexOf(text) >= 0) {
         this.updateNumber(text)
       } else if ('+-*÷'.indexOf(text) >= 0) {
@@ -103,8 +105,8 @@
       }
     }
 
-    bindEvent (): void {
-      this.container.addEventListener('click', (e) => {
+    bindEvent(): void {
+      this.container.addEventListener('click', e => {
         if (e.target instanceof HTMLButtonElement) {
           let button: HTMLButtonElement = e.target
           let text = button.textContent
