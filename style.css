@@ -23,7 +23,7 @@ body {
 
 .calculator .output {
   height: 4em;
-  border: 1px solid red;
+  border: 1px solid rgb(186, 186, 186);
 }
 
 .calculator .row {
@@ -55,4 +55,6 @@ body {
   right: .5em;
   top: 2em;
   font-size: 1.2em;
+  display: flex;
+  justify-content: space-between;
 }

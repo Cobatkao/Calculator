@@ -4,8 +4,9 @@
     private output: HTMLDivElement
     private span: HTMLSpanElement
     public operator: string
-    public n1: number
-    public n2: number
+    public n1: string = null
+    public n2: string = null
+    public result: string
     private keys: Array<Array<string>> = [
       ['clear', '÷'],
       ['7', '8', '9', '+'],
@@ -60,48 +61,74 @@
       })
     }
 
-    updateNum(n: number, text: string): void {
-      if (n) {
-        n = parseInt(n.toString() + text)
+    updateNum(name: string, text: string): void {
+      if (this[name]) {
+        this[name] += text
       } else {
-        n = parseInt(text)
+        this[name] = text
       }
-      this.span.textContent = n.toString()
+      this.span.textContent = this[name]
     }
 
     updateNumber(text: string): void {
       if (this.operator) {
-        this.updateNum(this.n2, text)
+        this.updateNum('n2', text)
       } else {
-        this.updateNum(this.n1, text)
+        this.updateNum('n1', text)
       }
     }
 
     updateOperator(text: string): void {
+      if (!this.n1) {
+        this.n1 = this.result
+      }
       this.operator = text
     }
 
     updateResult(): void {
       let result
+      let n1: number = parseFloat(this.n1)
+      let n2: number = parseFloat(this.n2)
       if (this.operator === '+') {
-        result = this.n1 + this.n2
+        result = n1 + n2
       } else if (this.operator === '-') {
-        result = this.n1 - this.n2
+        result = n1 - n2
       } else if (this.operator === '*') {
-        result = this.n1 * this.n2
+        result = n1 * n2
       } else if (this.operator === '÷') {
-        result = this.n1 / this.n2
+        result = n1 / n2
+      }
+      result = result
+        .toPrecision(12)
+        .replace(/0+$/g, '')
+        .replace(/0+e/g, '')
+      if (n2 === 0) {
+        result = '不是数字'
       }
       this.span.textContent = result.toString()
+      this.n1 = null
+      this.n2 = null
+      this.operator = null
+      this.result = result //单次计算结果
+    }
+
+    resetOutput() {
+      this.n1 = null
+      this.n2 = null
+      this.operator = null
+      this.result = '0'
+      this.span.textContent = this.result
     }
 
     updateNumberAndOperator(text: string): void {
-      if ('0123456789'.indexOf(text) >= 0) {
+      if ('0123456789.'.indexOf(text) >= 0) {
         this.updateNumber(text)
       } else if ('+-*÷'.indexOf(text) >= 0) {
         this.updateOperator(text)
       } else if ('='.indexOf(text) >= 0) {
         this.updateResult()
+      } else if (text === 'clear') {
+        this.resetOutput()
       }
     }
 
@@ -110,9 +137,8 @@
         if (e.target instanceof HTMLButtonElement) {
           let button: HTMLButtonElement = e.target
           let text = button.textContent
+          console.log('点击按钮', text)
           this.updateNumberAndOperator(text)
-        } else {
-          return
         }
       })
     }
